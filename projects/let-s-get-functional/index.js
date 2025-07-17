@@ -20,16 +20,51 @@
  */
 
 var maleCount = function(array) {
-  
+	const males = _.filter(array, elem => elem.gender === "male");
+	return males.length;
+
+	/* loop solution
+	let malesCount = 0;
+	for (let i = 0; i < array.length; i++) {
+		if (array[i].gender === "male") {
+			malesCount++;
+		}
+	}
+	return malesCount;
+	*/
 };
 
-var femaleCount;
+var femaleCount = function(array) {
+	return _.reduce(array, (count, elem) => elem.gender === "female" ? count + 1 : count, 0);
+};
 
-var oldestCustomer;
+var oldestCustomer = function(array) {
+	return _.reduce(array, (currentOldest, customer) => customer.age > currentOldest.age ? customer : currentOldest).name;
+};
 
-var youngestCustomer;
+var youngestCustomer = function(array) {
+	return _.reduce(array, (currentYoungest, customer) => customer.age < currentYoungest.age ? customer : currentYoungest).name;
+};
 
-var averageBalance;
+var averageBalance = function(array) {
+	//I'm having problems summing the balances because the balances are stored as strings of form "$#,###.##"
+	//So I need to convert the string to a number, but first I have to get rid of the dollar sign and comma
+	//There must be a better way than my "rebuild the string without the bad characters" solution but this should at least work
+	const getNumericBalance = function(stringBalance) {
+		const numericChars = "0123456789."; //can validly be part of a number
+		let convertibleString = "";
+
+		for (let i = 0; i < stringBalance.length; i++) {
+			if (numericChars.includes(stringBalance[i])) {
+				convertibleString += stringBalance[i];
+			}
+		}
+
+		return Number(convertibleString);
+	}
+
+	return _.reduce(array, (runningTotal, elem) => runningTotal + getNumericBalance(elem.balance), 0) / array.length;
+};
 
 var firstLetterCount;
 
