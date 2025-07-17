@@ -66,9 +66,18 @@ var averageBalance = function(array) {
 	return _.reduce(array, (runningTotal, elem) => runningTotal + getNumericBalance(elem.balance), 0) / array.length;
 };
 
-var firstLetterCount;
+var firstLetterCount = function(array, letter) {
+	//this only checks the first letter of the first name, not the last name
+	return _.reduce(array, (count, elem) => elem.name[0].toLowerCase() === letter.toLowerCase() ? count + 1 : count, 0);
 
-var friendFirstLetterCount;
+};
+
+var friendFirstLetterCount = function(array, customer, letter) {
+	//use find to get the correct customer object, then bind the customer's friends array to the friendList variable
+	const friendList = array.find(elem => elem.name === customer).friends;
+	//this reduce call is the same as in firstLetterCount except that it operates on the friendList array instead of the array of all customers
+	return _.reduce(friendList, (count, elem) => elem.name[0].toLowerCase() === letter.toLowerCase() ? count + 1 : count, 0)
+};
 
 var friendsCount;
 
