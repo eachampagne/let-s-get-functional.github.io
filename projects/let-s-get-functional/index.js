@@ -20,7 +20,9 @@
  */
 
 var maleCount = function(array) {
+	//use filter to get an array of just males
 	const males = _.filter(array, elem => elem.gender === "male");
+	//the number of males is equal to the length of the males array
 	return males.length;
 
 	/* loop solution
@@ -35,14 +37,25 @@ var maleCount = function(array) {
 };
 
 var femaleCount = function(array) {
+	//use reduce to count the number of females
+	//starting with a count of zero, reduce iterates over the array and increments the count only for female customers 
 	return _.reduce(array, (count, elem) => elem.gender === "female" ? count + 1 : count, 0);
 };
 
 var oldestCustomer = function(array) {
+	//use reduce to find the oldest customer
+	//reduce carries the oldest customer found so far in the memo, starting with the first element of the array
+	//as it iterates over the array, it compares the age of the current customer to the oldest so far and keeps the older of the two
+	//once reduce has found the oldest customer, that customer's name is returned
 	return _.reduce(array, (currentOldest, customer) => customer.age > currentOldest.age ? customer : currentOldest).name;
 };
 
 var youngestCustomer = function(array) {
+	//similar to oldestCustomer()
+	//use reduce to find the youngest customer
+	//reduce carries the youngest customer found so far in the memo, starting with the first element of the array
+	//as it iterates over the array, it compares the age of the current customer to the youngest so far and keeps the younger of the two
+	//once reduce has found the youngest customer, that customer's name is returned
 	return _.reduce(array, (currentYoungest, customer) => customer.age < currentYoungest.age ? customer : currentYoungest).name;
 };
 
@@ -63,10 +76,15 @@ var averageBalance = function(array) {
 		return Number(convertibleString);
 	}
 
+	//uses reduce to sum the balances of each customer by adding each balance to the running total
+	//the balance has to be converted from a string to a number using getNumericBalance (which also handles the punctuation)
+	//once the sum is computed, it is divided by the total number of customers to get the average balance
 	return _.reduce(array, (runningTotal, elem) => runningTotal + getNumericBalance(elem.balance), 0) / array.length;
 };
 
 var firstLetterCount = function(array, letter) {
+	//uses reduce to count the numbers of names that start with the input letter
+	//reduce keeps a count, starting with 0. For each customer, it checks whether the customer's first name starts with the target letter (using toLowerCase to eliminate case dependency) and increments the count if so
 	//this only checks the first letter of the first name, not the last name
 	return _.reduce(array, (count, elem) => elem.name[0].toLowerCase() === letter.toLowerCase() ? count + 1 : count, 0);
 
@@ -74,6 +92,7 @@ var firstLetterCount = function(array, letter) {
 
 var friendFirstLetterCount = function(array, customer, letter) {
 	//use find to get the correct customer object, then bind the customer's friends array to the friendList variable
+	//I keep forgetting that find works with a condition/test function, not a specific value
 	const friendList = array.find(elem => elem.name === customer).friends;
 	//this reduce call is the same as in firstLetterCount except that it operates on the friendList array instead of the array of all customers
 	return _.reduce(friendList, (count, elem) => elem.name[0].toLowerCase() === letter.toLowerCase() ? count + 1 : count, 0)
